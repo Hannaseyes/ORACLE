@@ -1,0 +1,53 @@
+--调出控制台
+set serveroutput on;
+DECLARE
+begin
+dbms_output.put_line('Hello Oracle!');
+end;
+--根据用户输入的信息并显示信息
+ACCEPT stu_no prompt '请输入学生学号'
+ACCEPT stu_name prompt '请输入学生姓名'
+DECLARE
+stuno int:=&stu_no;
+stuname varchar(10):=&stu_name;
+begin
+DBMS_OUTPUT.PUT_LINE('学生学号为：'||stuno);
+DBMS_OUTPUT.PUT_LINE('学生姓名为：'||stuname);
+END;
+--查询员工编号为105的员工姓名和薪水（hr表中）
+declare
+  name varchar(30):='';
+  salary number;
+begin
+  select first_name||' '||last_name ,salary into name,salary from employees where employee_id=105;
+  dbms_output.put_line('姓名是：'||name||',工资：'||salary);
+end;
+--控制语句
+ACCEPT score prompt '请输入分数'
+declare
+score int:=&score;
+begin
+if score<60 and score>=0 then
+ dbms_output.put_line('不及格');
+ elsif score>=60 and score <80 then
+  dbms_output.put_line('及格');
+   elsif score>=80 and score <=95 then
+  dbms_output.put_line('及格');
+  elsif score<=100 then
+   dbms_output.put_line('优秀');
+   else
+    dbms_output.put_line('输入错误！');
+    end if;
+end;
+--循环加前100 个数
+declare
+total int:=0;
+i int:=1;
+begin
+loop
+total:=total+i;
+i:=i+1;
+exit when i>100;
+end loop;
+dbms_output.put_line('和为：'||total);
+end;
