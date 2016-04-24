@@ -1,10 +1,9 @@
---调出控制台
 set serveroutput on;
 DECLARE
 begin
 dbms_output.put_line('Hello Oracle!');
 end;
---根据用户输入的信息并显示信息
+----根据用户输入的信息并显示信息
 ACCEPT stu_no prompt '请输入学生学号'
 ACCEPT stu_name prompt '请输入学生姓名'
 DECLARE
@@ -16,11 +15,11 @@ DBMS_OUTPUT.PUT_LINE('学生姓名为：'||stuname);
 END;
 --查询员工编号为105的员工姓名和薪水（hr表中）
 declare
-  name varchar(30):='';
-  salary number;
+  age DATE;
+  name varchar(10);
 begin
-  select first_name||' '||last_name ,salary into name,salary from employees where employee_id=105;
-  dbms_output.put_line('姓名是：'||name||',工资：'||salary);
+  select STUDENT_AGE,STUDENT_NAME into age,name from STUDENT where STUDENT_NAME='张三';
+  dbms_output.put_line('姓名是：'||name||',生日：'||age);
 end;
 --控制语句
 ACCEPT score prompt '请输入分数'
