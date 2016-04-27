@@ -75,3 +75,63 @@ select a.STUDENT_NAME,a.STUDENT_ID,t.SCORE from STUDENT a inner join
 (select SID,SCORE from SC where CID=(--查询出课程成绩和学生ID
 select COURSE_ID from COURSE where COURSE_ID='003'))t --查询课程ID
 on t.SID=a.STUDENT_ID where t.SCORE>80;
+--1、编写一个pl/sql程序块，从emp表中对名字以”a”或”s”开始的所有雇员按他们基本薪水的10%给他们加薪。
+declare
+cursor c is select EMPLOYEE_ID,salary from COPY_EMPLOYEES where first_name like 'A%' or first_name like 'S%';
+--定义航记录的类型     
+eid int;
+sal number;
+begin
+open c;
+loop
+fetch c into eid,sal;
+exit when c%notfound;
+update COPY_EMPLOYEES set salary=sal*1.1 where employee_id=eid;
+commit;
+end loop;
+end;
+--2.接受一个部门号，从emp表中显示该部门的所有雇员的姓名，工作和薪水
+set serveroutput on;
+accept departid prompt '请输入部门号：'
+declare
+cursor c is select * from COPY_EMPLOYEES where DEPARTMENT_ID=&departid;
+record COPY_EMPLOYEES%rowType;
+--定义航记录的类型     
+begin
+open c;
+loop
+fetch c into record;
+exit when c%notfound;
+dbms_output.PUT_LINE('姓名是：'||record.first_name||'   年龄是：'||record.HIRE_DATE);
+commit;
+end loop;
+end;
+--3.某公司要根据雇员的职位来加薪，公司决定按下列加薪结构处理：
+--职位    加薪幅度
+--Clerk      500
+--Salesman   1000
+--Analyst     1500
+--Otherwise   2000
+--编写一一个程序块，接收一个雇员名，从emp表中实现上述加薪处理。
+set serveroutput on;
+accept departid prompt '请输入雇员名：'
+declare
+  cursor c is select * from copy_employees where first_name=&departid;
+  record copy_employees %rowtype;
+begin
+  open c;
+  loop
+    fetch c into record;
+    exit when c%notfound;
+    if record.job_id='SA_MAN'
+        then update copy_employees set salary=salary+1000 where employee_id=record.employee_id;
+         elsif record.job_id='Clerk'
+        then update copy_employees set salary=salary+500 where employee_id=record.employee_id;
+         elsif record.job_id='Analyst'
+        then update copy_employees set salary=salary+1500 where employee_id=record.employee_id;
+        else
+         update copy_employees set salary=salary+2000 where employee_id=record.employee_id;
+    end if;
+    commit;
+  end loop;
+end;
